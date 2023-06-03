@@ -15,43 +15,44 @@ export const StyledNavLink = styled(NavLink)`
   padding: 20px 0;
   font-size: 25px;
   color: #212121;
-  transition: color 250ms ease-in-out;
+  transform: scale3d(1, 1, 1);
+  transition: transform 250ms ease-in-out;
 
-  &::after {
+  /* &::after {
     content: '';
     display: block;
     position: absolute;
     left: 0;
-    bottom: -1px;
+    bottom: 1px;
 
     width: 100%;
     height: 5px;
 
-    background-color: green;
+    background-color: #212121;
     border-radius: 4px;
 
     transform-origin: right;
     transform: scaleX(0);
     transition: transform 250ms;
-  }
+  } */
 
   &:hover,
-  &:focus-visible {
-    color: green;
+  &:focus {
+    transform: scale3d(1.1, 1.1, 1.1);
 
-    &::after {
+    /* &::after {
       transform-origin: left;
       transform: scaleX(1);
-    }
+    } */
   }
 
   &.active {
     color: orangered;
 
-    &:hover::after,
-    &:focus-visible::after {
+    /* &:hover::after,
+    &:focus::after {
       background-color: orangered;
-    }
+    } */
   }
 `;
 

@@ -39,9 +39,17 @@ export const StyledSearchInput = styled.input`
   border-radius: 5px;
 `;
 
-export const StyledSearchButton = styled.button`
+export const StyledhSearchButton = styled.button`
   width: 100px;
   height: 35px;
   font-size: 15px;
   border-radius: 5px;
+`;
+
+export const StyledLoadMoreBtn = styled(StyledhSearchButton)`
+  margin-top: 10px;
+`;
+
+export const StyledBackButton = styled(StyledhSearchButton)`
+  margin-left: 10px;
 `;

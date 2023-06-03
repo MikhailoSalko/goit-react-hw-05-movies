@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { Report } from 'notiflix';
 import { notiflixSettings } from 'components/Notiflix.init/Notiflix.init';
@@ -7,9 +7,9 @@ import { fetchFilmsBySearchQuery } from 'api/fetchFunctions';
 import {
   StyledForm,
   StyledSearchInput,
-  StyledSearchButton,
   StyledList,
   StyledLink,
+  StyledhSearchButton,
 } from '../../styles/pageStyles.styled';
 
 const MoviesPage = () => {
@@ -18,22 +18,16 @@ const MoviesPage = () => {
   const [films, setFilms] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
-  const search = searchParams.get('query') ?? '';
+  const query = searchParams.get('query') ?? '';
+  console.log(query);
+  // const page = searchParams.get('page');
 
-  const handleSearchValue = e => {
-    const searchQuery = e.target.value;
-    if (searchQuery !== '') {
-      return setSearchParams({ query: searchQuery });
+  useEffect(() => {
+    if (!query) {
+      return;
     }
-    return setSearchParams({});
-  };
-
-  const fetchFimlByName = e => {
-    e.preventDefault();
-    const search = e.target.search.value;
-    console.log(search);
     setLoading(true);
-    fetchFilmsBySearchQuery(search)
+    fetchFilmsBySearchQuery(query)
       .then(({ results }) => {
         if (results.length === 0) {
           return Report.info(
@@ -41,11 +35,20 @@ const MoviesPage = () => {
             notiflixSettings
           );
         }
-        return setFilms([...results]);
+        setFilms([...results]);
       })
       .catch(error => setError(error.message))
       .finally(() => setLoading(false));
+  }, [query]);
+
+  const handleSubmitForm = e => {
+    e.preventDefault();
+    setSearchParams({ query: e.target.search.value });
   };
+
+  // const handleLoadMoreBtn = () => {
+  //   setSearchParams({ query, page: Number(page) + 1 });
+  // };
 
   const elements = films.map(({ id, title }) => (
     <li key={id}>
@@ -63,17 +66,21 @@ const MoviesPage = () => {
           'Something went wrong, please try again later',
           notiflixSettings
         )}
-      <StyledForm onSubmit={fetchFimlByName}>
+      <StyledForm onSubmit={handleSubmitForm}>
         <StyledSearchInput
           type="text"
           name="search"
           placeholder="Please, enter the movie name"
-          onChange={handleSearchValue}
-          value={search}
+          defaultValue={query}
         />
-        <StyledSearchButton type="submit">Search</StyledSearchButton>
+        <StyledhSearchButton type="submit">Search</StyledhSearchButton>
       </StyledForm>
       <StyledList>{elements}</StyledList>
+      {/* {page && (
+        <StyledLoadMoreBtn onClick={handleLoadMoreBtn}>
+          Load more
+        </StyledLoadMoreBtn>
+      )} */}
     </>
   );
 };

@@ -1,4 +1,8 @@
-const TREND_FILMS_URL = 'https://api.themoviedb.org/3/trending/movie/week';
+const URLS = {
+  TREND_FILMS: 'https://api.themoviedb.org/3/trending/movie/week',
+  FILM_BY_SEARCH: 'https://api.themoviedb.org/3/search/movie',
+};
+
 const OPTIONS = {
   headers: {
     accept: 'application/json',
@@ -8,11 +12,21 @@ const OPTIONS = {
 };
 
 export const fetchTrendFims = () => {
-  return fetch(`${TREND_FILMS_URL}`, OPTIONS).then(response => {
+  return fetch(`${URLS.TREND_FILMS}`, OPTIONS).then(response => {
     if (!response.ok) {
       throw new Error(response.status);
     }
     return response.json();
-    // console.log(response.json());
   });
+};
+
+export const fetchFilmsBySearchQuery = search => {
+  return fetch(`${URLS.FILM_BY_SEARCH}?query=${search}}`, OPTIONS).then(
+    response => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    }
+  );
 };

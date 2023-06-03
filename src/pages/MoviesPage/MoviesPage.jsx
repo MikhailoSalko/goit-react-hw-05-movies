@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { Report } from 'notiflix';
 import { notiflixSettings } from 'components/Notiflix.init/Notiflix.init';

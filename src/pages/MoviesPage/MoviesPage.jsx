@@ -2,16 +2,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { Report } from 'notiflix';
 import { notiflixSettings } from 'js/Notiflix.init';
-import Loader from 'components/Loader/Loader';
+import SearchForm from 'components/SearchForm/SearchForm';
+import FilmList from 'components/FilmList/FilmList';
+import { LoaderTailSpin } from 'components/Loader/Loader';
 import { fetchFilmsBySearchQuery } from 'api/fetchFunctions';
 import {
-  StyledForm,
-  StyledSearchInput,
-  StyledList,
-  StyledhSearchButton,
+  StyledFilmList,
   // StyledLoadMoreBtn,
 } from '../../styles/pageStyles.styled';
-import FilmList from 'components/FilmList/FilmList';
 
 const MoviesPage = () => {
   const [loading, setLoading] = useState(false);
@@ -65,21 +63,13 @@ const MoviesPage = () => {
           'Something went wrong, please try again later',
           notiflixSettings
         )}
-      <StyledForm onSubmit={handleSubmitForm}>
-        <StyledSearchInput
-          type="text"
-          name="search"
-          placeholder="Please, enter the movie name"
-          defaultValue={query}
-        />
-        <StyledhSearchButton type="submit">Search</StyledhSearchButton>
-      </StyledForm>
+      <SearchForm onSubmit={handleSubmitForm} query={query} />
       {loading ? (
-        <Loader />
+        <LoaderTailSpin />
       ) : (
-        <StyledList>
+        <StyledFilmList>
           <FilmList array={films} location={location} />
-        </StyledList>
+        </StyledFilmList>
       )}
       {/* {query && (
         <StyledLoadMoreBtn onClick={handleLoadMoreBtn}>

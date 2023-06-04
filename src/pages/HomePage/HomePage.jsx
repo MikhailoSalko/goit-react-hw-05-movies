@@ -2,9 +2,12 @@ import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Report } from 'notiflix';
 import { notiflixSettings } from 'js/Notiflix.init';
-import Loader from 'components/Loader/Loader';
+import { LoaderTailSpin } from 'components/Loader/Loader';
 import { fetchTrendFims } from 'api/fetchFunctions';
-import { StyledHeading, StyledList } from '../../styles/pageStyles.styled';
+import {
+  StyledHomeHeading,
+  StyledFilmList,
+} from '../../styles/pageStyles.styled';
 import FilmList from 'components/FilmList/FilmList';
 
 const HomePage = () => {
@@ -31,13 +34,13 @@ const HomePage = () => {
           notiflixSettings
         )}
       {loading ? (
-        <Loader />
+        <LoaderTailSpin />
       ) : (
         <>
-          <StyledHeading>Trending movies today</StyledHeading>
-          <StyledList>
+          <StyledHomeHeading>Trending movies today</StyledHomeHeading>
+          <StyledFilmList>
             <FilmList array={trendFilms} location={location} />
-          </StyledList>
+          </StyledFilmList>
         </>
       )}
     </>

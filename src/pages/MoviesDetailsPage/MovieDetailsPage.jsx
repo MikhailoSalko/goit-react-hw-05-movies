@@ -4,7 +4,7 @@ import { Report } from 'notiflix';
 import { notiflixSettings } from 'js/Notiflix.init';
 import { fetchFilmById } from 'api/fetchFunctions';
 import MovieDetails from 'components/MovieDetails/MovieDetails';
-import Loader from 'components/Loader/Loader';
+import { LoaderTailSpin } from 'components/Loader/Loader';
 import {
   StyledBackButton,
   StyledLink,
@@ -57,7 +57,7 @@ const MovieDetailsPage = () => {
           notiflixSettings
         )}
       {loading ? (
-        <Loader />
+        <LoaderTailSpin />
       ) : (
         <>
           <StyledBackButton
@@ -86,7 +86,7 @@ const MovieDetailsPage = () => {
               </StyledLink>
             </li>
           </StyledListMoviesDetails>
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<LoaderTailSpin />}>
             <Outlet />
           </Suspense>
         </>

@@ -1,13 +1,14 @@
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { StyledSearchButton } from 'components/SearchForm/SearchForm.styled';
+import { Link } from 'react-router-dom';
 
-export const StyledHeading = styled.h1`
+export const StyledHomeHeading = styled.h1`
   font-size: 50px;
   margin-bottom: 20px;
   color: #32363d;
 `;
 
-export const StyledList = styled.ul`
+export const StyledFilmList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -26,40 +27,20 @@ export const StyledLink = styled(Link)`
   transition: color 250ms ease;
 
   &:hover,
-  &:focus {
+  &:focus-visible {
     color: #eb1b0c;
     text-decoration: underline;
   }
 `;
 
-export const StyledForm = styled.form`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-export const StyledSearchInput = styled.input`
-  display: block;
-  width: 250px;
-  height: 30px;
-  border-radius: 5px;
-`;
-
-export const StyledhSearchButton = styled.button`
-  width: 100px;
-  height: 35px;
-  font-size: 15px;
-  border-radius: 5px;
-`;
-
-export const StyledLoadMoreBtn = styled(StyledhSearchButton)`
-  margin-top: 10px;
-`;
-
-export const StyledBackButton = styled(StyledhSearchButton)`
+export const StyledBackButton = styled(StyledSearchButton)`
   margin-left: 10px;
 `;
 
-export const StyledBackHomePageBtn = styled(StyledhSearchButton)`
+export const StyledBackHomePageBtn = styled(StyledSearchButton)`
   width: 150px;
+`;
+
+export const StyledLoadMoreBtn = styled(StyledSearchButton)`
+  margin-top: 10px;
 `;

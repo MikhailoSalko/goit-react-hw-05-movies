@@ -1,45 +1,72 @@
 import { useEffect, useState } from 'react';
 import { fetchCastByFilmId } from 'api/fetchFunctions';
 import { useParams } from 'react-router-dom';
-// import { StyledList } from 'styles/pageStyles.styled';
+import { Report } from 'notiflix';
+import { notiflixSettings } from 'js/Notiflix.init';
+import { LoaderTailSpin } from 'components/Loader/Loader';
+
 import {
+  StyledActorCharacter,
   StyledActorContainer,
-  StyledCastList,
-  StyledCharacter,
-  StyledImg,
-  StyledName,
+  StyledActorImg,
+  StyledActorName,
+  StyledActorsList,
 } from './Cast.styled';
 
 const BASE_URL = 'https://image.tmdb.org/t/p/';
-const IMG_SIZE = 'w300';
+const IMG_SIZE = 'w500';
 
 const Cast = () => {
-  const { movieId } = useParams();
   const [cast, setCast] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const { movieId } = useParams();
 
   useEffect(() => {
     const getCast = async () =>
       fetchCastByFilmId(movieId).then(({ cast }) => {
         return setCast(cast);
       });
-    getCast();
+    setLoading(true);
+    getCast()
+      .catch(error => setError(error))
+      .finally(() => setLoading(false));
   }, [movieId]);
 
-  console.log(cast);
+  return (
+    <>
+      {error &&
+        Report.failure(
+          'Something went wrong, please try again later',
+          notiflixSettings
+        )}
 
-  const elements = cast.map(({ id, name, character, profile_path }) => {
-    return (
-      <li key={id}>
-        <StyledActorContainer>
-          <StyledImg src={`${BASE_URL}${IMG_SIZE}${profile_path}`} alt="" />
-          <StyledName>{name}</StyledName>
-          <StyledCharacter>{character}</StyledCharacter>
-        </StyledActorContainer>
-      </li>
-    );
-  });
-
-  return <StyledCastList>{elements}</StyledCastList>;
+      {loading ? (
+        <LoaderTailSpin />
+      ) : (
+        <StyledActorsList>
+          {cast.length === 0 ? (
+            <p>We don't have any information about actors</p>
+          ) : (
+            cast.map(({ id, name, character, profile_path }) => {
+              return (
+                <li key={id}>
+                  <StyledActorContainer>
+                    <StyledActorImg
+                      src={`${BASE_URL}${IMG_SIZE}${profile_path}`}
+                      alt={name}
+                    />
+                    <StyledActorName>{name}</StyledActorName>
+                    <StyledActorCharacter>{character}</StyledActorCharacter>
+                  </StyledActorContainer>
+                </li>
+              );
+            })
+          )}
+        </StyledActorsList>
+      )}
+    </>
+  );
 };
 
 export default Cast;

@@ -1,6 +1,6 @@
 import { TailSpin } from 'react-loader-spinner';
 
-const Loader = () => {
+export const LoaderTailSpin = () => {
   return (
     <TailSpin
       height="80"
@@ -14,5 +14,3 @@ const Loader = () => {
     />
   );
 };
-
-export default Loader;

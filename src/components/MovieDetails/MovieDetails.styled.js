@@ -3,17 +3,12 @@ import styled from 'styled-components';
 export const StyledContainer = styled.div`
   display: flex;
   gap: 20px;
-  margin: 10px 0 20px;
+  margin: 20px 0;
 `;
 
 export const StyledImgContainer = styled.div`
   margin-right: 10px;
 `;
-
-// export const StyledImg = styled.img`
-//   width: 900px;
-//   height: 400px;
-// `;
 
 export const StyledDescriptionContainer = styled.div`
   display: flex;

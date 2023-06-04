@@ -2,7 +2,6 @@ import {
   StyledContainer,
   StyledDescriptionContainer,
   StyledFilmName,
-  // StyledImg,
   StyledImgContainer,
   StyledUserRating,
 } from './MovieDetails.styled';

@@ -2,18 +2,19 @@ import styled from 'styled-components';
 
 export const StyledActorsList = styled.ul`
   display: flex;
-  gap: 20px;
+  gap: 30px;
   flex-wrap: wrap;
 `;
 
 export const StyledActorContainer = styled.div`
   width: 250px;
   height: 350px;
+  text-align: center;
 `;
 
 export const StyledActorImg = styled.img`
-  width: 200px;
-  height: 300px;
+  width: 100%;
+  height: 320px;
   margin-bottom: 10px;
 `;
 

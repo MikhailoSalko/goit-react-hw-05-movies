@@ -11,9 +11,6 @@ import {
   StyledListMoviesDetails,
 } from 'styles/pageStyles.styled';
 
-const BASE_URL = 'https://image.tmdb.org/t/p/';
-const IMG_SIZE = 'w500';
-
 const MovieDetailsPage = () => {
   const [film, setFilm] = useState({});
   const [loading, setLoading] = useState(false);
@@ -35,7 +32,7 @@ const MovieDetailsPage = () => {
         }) => {
           setFilm({
             overview,
-            img: `${BASE_URL}${IMG_SIZE}${poster_path}`,
+            img: poster_path,
             title,
             genres: genres.map(genre => genre.name).join(' '),
             rating: parseInt(vote_average * 10),

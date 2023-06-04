@@ -42,7 +42,9 @@ const Reviews = () => {
       ) : (
         <StyledReviewsList>
           {reviews.length === 0 ? (
-            <p>There are no any reviews for this movie</p>
+            <p style={{ fontSize: '20px', fontWeight: 'bold' }}>
+              We don't have any reviews for this movie
+            </p>
           ) : (
             reviews.map(({ id, author, content }) => (
               <StyledReviewItem key={id}>

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Report } from 'notiflix';
 import { notiflixSettings } from 'js/Notiflix.init';
 import { LoaderTailSpin } from 'components/Loader/Loader';
+import defaultperson from '../../images/defaultPerson.png';
 
 import {
   StyledActorCharacter,
@@ -46,14 +47,20 @@ const Cast = () => {
       ) : (
         <StyledActorsList>
           {cast.length === 0 ? (
-            <p>We don't have any information about actors</p>
+            <p style={{ fontSize: '20px', fontWeight: 'bold' }}>
+              We don't have any information about the cast
+            </p>
           ) : (
             cast.map(({ id, name, character, profile_path }) => {
               return (
                 <li key={id}>
                   <StyledActorContainer>
                     <StyledActorImg
-                      src={`${BASE_URL}${IMG_SIZE}${profile_path}`}
+                      src={
+                        profile_path
+                          ? `${BASE_URL}${IMG_SIZE}${profile_path}`
+                          : defaultperson
+                      }
                       alt={name}
                     />
                     <StyledActorName>{name}</StyledActorName>

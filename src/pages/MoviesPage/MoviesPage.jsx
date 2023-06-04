@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { Report } from 'notiflix';
 import { notiflixSettings } from 'components/Notiflix.init/Notiflix.init';
@@ -10,6 +10,7 @@ import {
   StyledList,
   StyledLink,
   StyledhSearchButton,
+  // StyledLoadMoreBtn,
 } from '../../styles/pageStyles.styled';
 
 const MoviesPage = () => {
@@ -19,16 +20,11 @@ const MoviesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const query = searchParams.get('query') ?? '';
-  console.log(query);
-  // const page = searchParams.get('page');
+  // const page = searchParams.get('page') ?? 1;
 
-  useEffect(() => {
-    if (!query) {
-      return;
-    }
-    setLoading(true);
-    fetchFilmsBySearchQuery(query)
-      .then(({ results }) => {
+  const getFimsByQuery = useCallback(
+    () =>
+      fetchFilmsBySearchQuery(query).then(({ results }) => {
         if (results.length === 0) {
           return Report.info(
             'There are no films per your request',
@@ -36,14 +32,26 @@ const MoviesPage = () => {
           );
         }
         setFilms([...results]);
-      })
-      .catch(error => setError(error.message))
-      .finally(() => setLoading(false));
-  }, [query]);
+      }),
+    [query]
+  );
+
+  useEffect(() => {
+    if (query) {
+      setLoading(true);
+      getFimsByQuery()
+        .catch(error => setError(error.message))
+        .finally(() => setLoading(false));
+    }
+  }, [getFimsByQuery, query]);
 
   const handleSubmitForm = e => {
     e.preventDefault();
-    setSearchParams({ query: e.target.search.value });
+    const query = e.target.search.value;
+    if (query === '') {
+      return Report.info('Please, enter the name of film', notiflixSettings);
+    }
+    setSearchParams({ query });
   };
 
   // const handleLoadMoreBtn = () => {
@@ -76,7 +84,7 @@ const MoviesPage = () => {
         <StyledhSearchButton type="submit">Search</StyledhSearchButton>
       </StyledForm>
       <StyledList>{elements}</StyledList>
-      {/* {page && (
+      {/* {query && (
         <StyledLoadMoreBtn onClick={handleLoadMoreBtn}>
           Load more
         </StyledLoadMoreBtn>

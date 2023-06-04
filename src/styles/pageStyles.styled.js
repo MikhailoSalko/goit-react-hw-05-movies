@@ -16,6 +16,7 @@ export const StyledList = styled.ul`
 export const StyledListMoviesDetails = styled.ul`
   display: flex;
   gap: 20px;
+  margin-bottom: 20px;
 `;
 
 export const StyledLink = styled(Link)`

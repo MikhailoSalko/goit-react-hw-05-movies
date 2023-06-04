@@ -14,10 +14,6 @@ import {
 const BASE_URL = 'https://image.tmdb.org/t/p/';
 const IMG_SIZE = 'w500';
 
-function getGenresString(genres) {
-  return genres.map(genre => genre.name).join(' ');
-}
-
 const MovieDetailsPage = () => {
   const [film, setFilm] = useState({});
   const [loading, setLoading] = useState(false);
@@ -41,7 +37,7 @@ const MovieDetailsPage = () => {
             overview,
             img: `${BASE_URL}${IMG_SIZE}${poster_path}`,
             title,
-            genres: getGenresString(genres),
+            genres: genres.map(genre => genre.name).join(' '),
             rating: parseInt(vote_average * 10),
             releaseYear: release_date.slice(0, 4),
           });

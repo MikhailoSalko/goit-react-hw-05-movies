@@ -1,8 +1,15 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useState, useEffect, Suspense } from 'react';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Report } from 'notiflix';
+import { notiflixSettings } from 'js/Notiflix.init';
 import { fetchFilmById } from 'api/fetchFunctions';
-import { StyledBackButton } from 'styles/pageStyles.styled';
-// import { Report } from 'notiflix';
+import MovieDetails from 'components/MovieDetails/MovieDetails';
+import Loader from 'components/Loader/Loader';
+import {
+  StyledBackButton,
+  StyledLink,
+  StyledListMoviesDetails,
+} from 'styles/pageStyles.styled';
 
 const BASE_URL = 'https://image.tmdb.org/t/p/';
 const IMG_SIZE = 'w500';
@@ -13,12 +20,14 @@ function getGenresString(genres) {
 
 const MovieDetailsPage = () => {
   const [film, setFilm] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const { movieId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const getMovieById = useCallback(
-    () =>
+  useEffect(() => {
+    const getMovieById = async () =>
       fetchFilmById(movieId).then(
         ({
           overview,
@@ -28,7 +37,6 @@ const MovieDetailsPage = () => {
           vote_average,
           release_date,
         }) => {
-          // console.log(data);
           setFilm({
             overview,
             img: `${BASE_URL}${IMG_SIZE}${poster_path}`,
@@ -38,47 +46,55 @@ const MovieDetailsPage = () => {
             releaseYear: release_date.slice(0, 4),
           });
         }
-      ),
-    [movieId]
-  );
-
-  useEffect(() => {
-    getMovieById();
-  }, [getMovieById]);
-
-  console.log(film);
-
-  const { overview, img, title, genres, rating, releaseYear } = film;
+      );
+    setLoading(true);
+    getMovieById()
+      .catch(error => setError(error.message))
+      .finally(() => setLoading(false));
+  }, [movieId]);
 
   return (
     <>
-      <StyledBackButton
-        type="button"
-        onClick={() => navigate(location.state?.from ?? '/movies')}
-      >
-        Go Back
-      </StyledBackButton>
-      <div>
-        <img src={img} alt="" />
-        <h1>
-          {title} ({releaseYear})
-        </h1>
-        <p>User Score: {rating}</p>
-        <h3>Overview</h3>
-        <p>{overview}</p>
-        <h3>Genres</h3>
-        <p>{genres}</p>
-      </div>
-      <br />
-      <h2>Additional information</h2>
-      <ul>
-        <li>
-          <Link to="cast">Cast</Link>
-        </li>
-        <li>
-          <Link to="reviews">Reviews</Link>
-        </li>
-      </ul>
+      {error &&
+        Report.failure(
+          'Something went wrong, please try again later',
+          notiflixSettings
+        )}
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <StyledBackButton
+            type="button"
+            onClick={() => navigate(location.state?.from ?? '/movies')}
+          >
+            Go Back
+          </StyledBackButton>
+          <MovieDetails film={film} />
+          <h2 style={{ marginBottom: '10px' }}>Additional information</h2>
+          <StyledListMoviesDetails>
+            <li>
+              <StyledLink
+                to="cast"
+                state={{ from: location.state?.from ?? '/movies' }}
+              >
+                Cast
+              </StyledLink>
+            </li>
+            <li>
+              <StyledLink
+                to="reviews"
+                state={{ from: location.state?.from ?? '/movies' }}
+              >
+                Reviews
+              </StyledLink>
+            </li>
+          </StyledListMoviesDetails>
+          <Suspense fallback={<Loader />}>
+            <Outlet />
+          </Suspense>
+        </>
+      )}
     </>
   );
 };

@@ -1,14 +1,11 @@
 import { useLocation } from 'react-router-dom';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Report } from 'notiflix';
-import { notiflixSettings } from 'components/Notiflix.init/Notiflix.init';
+import { notiflixSettings } from 'js/Notiflix.init';
 import Loader from 'components/Loader/Loader';
 import { fetchTrendFims } from 'api/fetchFunctions';
-import {
-  StyledHeading,
-  StyledLink,
-  StyledList,
-} from '../../styles/pageStyles.styled';
+import { StyledHeading, StyledList } from '../../styles/pageStyles.styled';
+import FilmList from 'components/FilmList/FilmList';
 
 const HomePage = () => {
   const [trendFilms, setTrendFilms] = useState([]);
@@ -25,30 +22,22 @@ const HomePage = () => {
       .catch(error => setError(error.message))
       .finally(() => setLoading(false));
   }, []);
-  const elements = useMemo(
-    () =>
-      trendFilms.map(({ id, title }) => (
-        <li key={id}>
-          <StyledLink to={`/movies/${id}`} state={{ from: location }}>
-            {title}
-          </StyledLink>
-        </li>
-      )),
-    [location, trendFilms]
-  );
 
   return (
     <>
-      {loading && <Loader />}
-      {error ? (
+      {error &&
         Report.failure(
           'Something went wrong, please try again later',
           notiflixSettings
-        )
+        )}
+      {loading ? (
+        <Loader />
       ) : (
         <>
           <StyledHeading>Trending movies today</StyledHeading>
-          <StyledList>{elements}</StyledList>
+          <StyledList>
+            <FilmList array={trendFilms} location={location} />
+          </StyledList>
         </>
       )}
     </>

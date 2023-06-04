@@ -13,6 +13,11 @@ export const StyledList = styled.ul`
   gap: 10px;
 `;
 
+export const StyledListMoviesDetails = styled.ul`
+  display: flex;
+  gap: 20px;
+`;
+
 export const StyledLink = styled(Link)`
   font-size: 20px;
   text-decoration: none;
@@ -52,4 +57,8 @@ export const StyledLoadMoreBtn = styled(StyledhSearchButton)`
 
 export const StyledBackButton = styled(StyledhSearchButton)`
   margin-left: 10px;
+`;
+
+export const StyledBackHomePageBtn = styled(StyledhSearchButton)`
+  width: 150px;
 `;

@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { Report } from 'notiflix';
-import { notiflixSettings } from 'components/Notiflix.init/Notiflix.init';
+import { notiflixSettings } from 'js/Notiflix.init';
 import Loader from 'components/Loader/Loader';
 import { fetchFilmsBySearchQuery } from 'api/fetchFunctions';
 import {
   StyledForm,
   StyledSearchInput,
   StyledList,
-  StyledLink,
   StyledhSearchButton,
   // StyledLoadMoreBtn,
 } from '../../styles/pageStyles.styled';
+import FilmList from 'components/FilmList/FilmList';
 
 const MoviesPage = () => {
   const [loading, setLoading] = useState(false);
@@ -58,17 +58,8 @@ const MoviesPage = () => {
   //   setSearchParams({ query, page: Number(page) + 1 });
   // };
 
-  const elements = films.map(({ id, title }) => (
-    <li key={id}>
-      <StyledLink to={`${id}`} state={{ from: location }}>
-        {title}
-      </StyledLink>
-    </li>
-  ));
-
   return (
     <>
-      {loading && <Loader />}
       {error &&
         Report.failure(
           'Something went wrong, please try again later',
@@ -83,7 +74,13 @@ const MoviesPage = () => {
         />
         <StyledhSearchButton type="submit">Search</StyledhSearchButton>
       </StyledForm>
-      <StyledList>{elements}</StyledList>
+      {loading ? (
+        <Loader />
+      ) : (
+        <StyledList>
+          <FilmList array={films} location={location} />
+        </StyledList>
+      )}
       {/* {query && (
         <StyledLoadMoreBtn onClick={handleLoadMoreBtn}>
           Load more

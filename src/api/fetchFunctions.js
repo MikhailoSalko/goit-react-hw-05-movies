@@ -40,3 +40,22 @@ export const fetchFilmById = id => {
     return response.json();
   });
 };
+
+export const fetchCastByFilmId = id => {
+  return fetch(`${URLS.FILM_BY_ID}${id}/credits`, OPTIONS).then(response => {
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return response.json();
+  });
+};
+
+export const fetchReviewsByFilmId = id => {
+  return fetch(`${URLS.FILM_BY_ID}${id}/reviews`, OPTIONS).then(response => {
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    console.log(response);
+    return response.json();
+  });
+};

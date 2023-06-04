@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { Report } from 'notiflix';
 import { notiflixSettings } from 'js/Notiflix.init';
@@ -20,8 +20,8 @@ const MoviesPage = () => {
   const query = searchParams.get('query') ?? '';
   // const page = searchParams.get('page') ?? 1;
 
-  const getFimsByQuery = useCallback(
-    () =>
+  useEffect(() => {
+    const getFimsByQuery = () =>
       fetchFilmsBySearchQuery(query).then(({ results }) => {
         if (results.length === 0) {
           return Report.info(
@@ -30,18 +30,14 @@ const MoviesPage = () => {
           );
         }
         setFilms([...results]);
-      }),
-    [query]
-  );
-
-  useEffect(() => {
+      });
     if (query) {
       setLoading(true);
       getFimsByQuery()
         .catch(error => setError(error.message))
         .finally(() => setLoading(false));
     }
-  }, [getFimsByQuery, query]);
+  }, [query]);
 
   const handleSubmitForm = e => {
     e.preventDefault();

@@ -1,8 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { fetchFilmById } from 'api/fetchFunctions';
 import { StyledBackButton } from 'styles/pageStyles.styled';
 // import { Report } from 'notiflix';
+
+const BASE_URL = 'https://image.tmdb.org/t/p/';
+const IMG_SIZE = 'w500';
+
+function getGenresString(genres) {
+  return genres.map(genre => genre.name).join(' ');
+}
 
 const MovieDetailsPage = () => {
   const [film, setFilm] = useState({});
@@ -10,40 +17,38 @@ const MovieDetailsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // {
-  //   overview, poster_path, title, genres, vote_average;
-  // }
+  const getMovieById = useCallback(
+    () =>
+      fetchFilmById(movieId).then(
+        ({
+          overview,
+          poster_path,
+          title,
+          genres,
+          vote_average,
+          release_date,
+        }) => {
+          // console.log(data);
+          setFilm({
+            overview,
+            img: `${BASE_URL}${IMG_SIZE}${poster_path}`,
+            title,
+            genres: getGenresString(genres),
+            rating: parseInt(vote_average * 10),
+            releaseYear: release_date.slice(0, 4),
+          });
+        }
+      ),
+    [movieId]
+  );
 
   useEffect(() => {
-    fetchFilmById(movieId).then(data => {
-      console.log(data);
-      setFilm({ ...data });
-    });
-    // .catch(error => setError(error.message))
-    // .finally(() => setLoading(false));
-  }, [movieId]);
+    getMovieById();
+  }, [getMovieById]);
+
   console.log(film);
 
-  // console.log(film);
-  // console.log(film.genres);
-
-  // const array = Object.entries(film.genres).forEach(([_, name]) =>
-  //   console.log(name.name)
-  // );
-
-  // const array = Object.entries(film.genres);
-  // console.log(array);
-
-  // const { overview, image, genres, vote_average, title } = film;
-  // console.log(genres);
-  // const arrayOfGenres = [];
-  // genres.forEach(obj => arrayOfGenres.push(obj.name));
-  // console.log(genres[0].name);
-  // console.log(genres[1].name);
-  // console.log(genres[2].name);
-
-  // const genresToRend = Object.fromEntries([...genres]);
-  // console.log(genresToRend);
+  const { overview, img, title, genres, rating, releaseYear } = film;
 
   return (
     <>
@@ -54,22 +59,24 @@ const MovieDetailsPage = () => {
         Go Back
       </StyledBackButton>
       <div>
-        {/* <img src={image} alt="" />
-        <h1>{title}</h1>
-        <p>User Score: {parseInt(vote_average * 10)}</p>
+        <img src={img} alt="" />
+        <h1>
+          {title} ({releaseYear})
+        </h1>
+        <p>User Score: {rating}</p>
         <h3>Overview</h3>
         <p>{overview}</p>
-        <h3>Genres</h3> */}
-        {/* <p>{((genres[0].name, genres[1].name), genres[2].name)}</p> */}
+        <h3>Genres</h3>
+        <p>{genres}</p>
       </div>
       <br />
       <h2>Additional information</h2>
       <ul>
         <li>
-          <Link></Link>
+          <Link to="cast">Cast</Link>
         </li>
         <li>
-          <Link></Link>
+          <Link to="reviews">Reviews</Link>
         </li>
       </ul>
     </>

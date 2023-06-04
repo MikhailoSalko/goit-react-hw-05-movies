@@ -17,6 +17,7 @@ export const fetchTrendFims = () => {
     if (!response.ok) {
       throw new Error(response.status);
     }
+    //     console.log(response);
     return response.json();
   });
 };
@@ -27,6 +28,7 @@ export const fetchFilmsBySearchQuery = search => {
       if (!response.ok) {
         throw new Error(response.status);
       }
+      //     console.log(response);
       return response.json();
     }
   );
@@ -37,6 +39,7 @@ export const fetchFilmById = id => {
     if (!response.ok) {
       throw new Error(response.status);
     }
+    // console.log(response);
     return response.json();
   });
 };
@@ -46,6 +49,7 @@ export const fetchCastByFilmId = id => {
     if (!response.ok) {
       throw new Error(response.status);
     }
+    // console.log(response);
     return response.json();
   });
 };
@@ -55,7 +59,7 @@ export const fetchReviewsByFilmId = id => {
     if (!response.ok) {
       throw new Error(response.status);
     }
-    console.log(response);
+    // console.log(response);
     return response.json();
   });
 };

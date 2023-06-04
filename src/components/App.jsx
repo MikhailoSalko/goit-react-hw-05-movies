@@ -1,5 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { LoaderTailSpin } from './Loader/Loader';
+
 const SharedLayout = lazy(() => import('./SharedLayout/SharedLayot'));
 const HomePage = lazy(() => import('pages/HomePage/HomePage'));
 const MoviesPage = lazy(() => import('pages/MoviesPage/MoviesPage'));
@@ -12,7 +14,7 @@ const Reviews = lazy(() => import('./Reviews/Reviews'));
 
 export const App = () => {
   return (
-    <Suspense fallback={<div>...Loading</div>}>
+    <Suspense fallback={<LoaderTailSpin />}>
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<HomePage />} />
